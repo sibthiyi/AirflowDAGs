@@ -1,0 +1,23 @@
+version: '3.7'
+
+services:
+  airflow:
+    # image: puckel/docker-airflow:latest
+    depends_on:
+      - postgres
+    build: ./docker-airflow
+    ports:
+      - 8080:8080
+    environment:
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: "postgresql+psycopg2://airflow:airflow@postgres:5432/airflow"
+    volumes:
+      - ./airflow/dags:/usr/local/airflow/dags
+
+  postgres:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: airflow
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
